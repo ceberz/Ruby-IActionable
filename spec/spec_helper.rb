@@ -1,1 +1,1 @@
-require 'riaction'
+require 'iactionable'

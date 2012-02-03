@@ -1,8 +1,3 @@
-require 'riaction/iactionable/objects/i_actionable_object.rb'
-require 'riaction/iactionable/objects/identifier.rb'
-require 'riaction/iactionable/objects/profile_points.rb'
-require 'riaction/iactionable/objects/achievement.rb'
-
 module IActionable
   module Objects
     class ProfileSummary < IActionableObject
