@@ -25,7 +25,7 @@ Before the API wrapper can be instantiated or used it must be pre-initialized wi
                                     :version => 3 )
     @api = IActionable::Api.new
 
-The responses for each of the endpoints of IActionable's API are described through example by [their documentation](http://www.iactionable.com/api/).  Here is an example of the response from a [profile summary](http://iactionable.com/api/profiles/#getprofilesummary) returned as an object by the wrapper.
+The responses for each of the endpoints of IActionable's API are described through example by [their documentation](http://www.iactionable.com/api/).  Here is an example of the response from a [profile summary](http://iactionable.com/api/) returned as an object by the wrapper.
 
     profile_summary = @api.get_profile_summary("user", "username", "zortnac", 10)
     profile_summary.display_name # => "Chris Eberz"
