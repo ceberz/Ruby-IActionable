@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{Ruby wrapper for IActionable's restful API.}
   s.description = %q{Ruby wrapper for IActionable's restful API.}
 
-  s.rubyforge_project = "ruby_iactionable"
+  s.rubyforge_project = "ruby-iactionable"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
