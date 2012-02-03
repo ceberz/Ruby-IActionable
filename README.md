@@ -10,7 +10,7 @@ Ruby IActionable is a straightforward wrapper for IActionable's restful API.  Th
 
 ## IRB ##
 
-    require 'iactionable'
+    require 'ruby-iactionable'
 
 ## Bundler ##
 
