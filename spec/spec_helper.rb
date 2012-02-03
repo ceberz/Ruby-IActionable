@@ -1,1 +1,1 @@
-require 'iactionable'
+require 'ruby_iactionable'

@@ -14,7 +14,7 @@ Ruby IActionable is a straightforward wrapper for IActionable's restful API.  Th
 
 ## Bundler ##
 
-    gem 'ruby-iactionable', :require => 'iactionable'
+    gem 'ruby-iactionable'
 
 ## API Credentials And Initialization ##
 
