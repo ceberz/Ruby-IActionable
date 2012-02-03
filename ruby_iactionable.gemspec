@@ -3,7 +3,7 @@ $:.push File.expand_path("../lib", __FILE__)
 require "iactionable/version"
 
 Gem::Specification.new do |s|
-  s.name        = "Ruby IActionable"
+  s.name        = "ruby-iactionable"
   s.version     = IActionable::VERSION
   s.authors     = ["Chris Eberz"]
   s.email       = ["ceberz@elctech.com"]
