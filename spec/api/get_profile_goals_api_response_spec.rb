@@ -43,6 +43,20 @@ describe "API response to get_profile_goals" do
     lambda { IActionable::Objects::ProfileGoals.new(@sample_response) }.should_not raise_error
   end
   
+  describe "with a malformed AwardDate string" do
+    before do
+       @sample_response["Completed"].first["AwardDate"] = 'bogus'
+    end
+    
+    it "should not raise error on wrapping in an object" do
+      lambda { IActionable::Objects::ProfileGoals.new(@sample_response) }.should_not raise_error
+    end
+    
+    it "should set the value of AwardDate to nil" do
+      IActionable::Objects::ProfileGoals.new(@sample_response).completed.first.award_date.should be_nil
+    end
+  end
+  
   describe "when wrapped in an object" do
     before do
       @wrapped = IActionable::Objects::ProfileGoals.new(Marshal.load(Marshal.dump(@sample_response)))

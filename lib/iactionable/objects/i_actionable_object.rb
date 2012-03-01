@@ -14,7 +14,11 @@ module IActionable
       def self.timestamp_to_seconds(timestamp)
         milliseconds = timestamp[timestamp_regexp, 1]
         tz = timestamp[timestamp_regexp, 2]
-        "#{Integer(milliseconds)/1000}#{tz}"
+        unless milliseconds.nil? || tz.nil?
+          "#{Integer(milliseconds)/1000}#{tz}"
+        else
+          nil
+        end
       end
       
       private
