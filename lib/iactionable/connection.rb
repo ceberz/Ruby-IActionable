@@ -68,6 +68,8 @@ module IActionable
       @response.body
     rescue Faraday::Error::ClientError => e
       handle_client_error e
+    rescue Faraday::Error::TimeoutError, Timeout::Error => e
+      raise e
     ensure
       @request = nil
     end
@@ -81,8 +83,10 @@ module IActionable
         req.body = @request.body unless @request.body.empty?
       end
       @response.body
-    rescue Exception => e
+    rescue Faraday::Error::ClientError => e
       handle_client_error e
+    rescue Faraday::Error::TimeoutError, Timeout::Error => e
+      raise e
     ensure
       @request = nil
     end
