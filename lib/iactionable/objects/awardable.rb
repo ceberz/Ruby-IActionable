@@ -35,7 +35,7 @@ module IActionable
       
         def awarded_on
           # bug in ruby 1.9.2 where Time.strptime does not support seconds-since-epoch format, but Date.strptime does, so we'll use that for now
-          Date.strptime(@award_date, "%s%z").to_time unless @award_date.blank?
+          DateTime.strptime(@award_date, "%s%z") unless @award_date.blank?
         end
         
         def awardable_hash

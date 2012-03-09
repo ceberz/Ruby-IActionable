@@ -1,5 +1,9 @@
 # CHANGELOG #
 
+## 0.0.5 ##
+
+* Fixed: IActionable::Objects::Awardable#awarded_on was stripping out time information when converting IActionable timestamp to Ruby time object
+
 ## 0.0.4 ##
 
 * explicitly rescuing from timeout errors.
