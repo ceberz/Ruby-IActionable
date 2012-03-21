@@ -6,6 +6,8 @@ module IActionable
   
   class Api
     attr :connection
+    attr :wrap_in_object
+    
     @@settings = nil
   
     def initialize
@@ -14,6 +16,7 @@ module IActionable
       else
         raise IActionable::ConfigError.new("IActionable::Api cannot be initialized without credentials being set in IActionable::Api.init_settings()")
       end
+      @wrap_in_object = true
     end
   
     def self.init_settings(values)
@@ -24,6 +27,11 @@ module IActionable
   
     def self.settings
       @@settings
+    end
+  
+    def set_object_wrapping(bool)
+      @wrap_in_object = !!bool
+      self
     end
   
     # =================
@@ -41,8 +49,11 @@ module IActionable
     def get_profile_summary(profile_type, id_type, id, achievement_count = nil)
       request = @connection.request.with_app_key.to("/#{profile_type}/#{id_type}/#{id}")
       request.with_params(:achievementCount => achievement_count) unless achievement_count.blank?
-      response = request.get
-      IActionable::Objects::ProfileSummary.new(response)
+      if @wrap_in_object
+        IActionable::Objects::ProfileSummary.new(request.get)
+      else
+        request.get
+      end
     end
   
     def create_profile(profile_type, id_type, id, display_name = nil)
@@ -62,14 +73,21 @@ module IActionable
   
     def get_profile_points(profile_type, id_type, id, point_type)
       response = @connection.request.with_app_key.to("/#{profile_type}/#{id_type}/#{id}/points/#{point_type}").get
-      IActionable::Objects::ProfilePoints.new(response)
+      if @wrap_in_object
+        IActionable::Objects::ProfilePoints.new(response)
+      else
+        response
+      end
     end
   
     def update_profile_points(profile_type, id_type, id, point_type, amount, reason = nil)
       request = @connection.request.with_app_key.with_api_key.to("/#{profile_type}/#{id_type}/#{id}/points/#{point_type}").with_params(:value => amount)
       request.with_params(:description => reason) unless reason.blank?
-      response = request.post
-      IActionable::Objects::ProfilePoints.new(response)
+      if @wrap_in_object
+        IActionable::Objects::ProfilePoints.new(request.post)
+      else
+        request.post
+      end
     end
   
     # =========================
@@ -86,12 +104,21 @@ module IActionable
       else
         request.to("/#{profile_type}/#{id_type}/#{id}/achievements")
       end
-      IActionable::Objects::ProfileAchievements.new(request.get)
+      
+      if @wrap_in_object
+        IActionable::Objects::ProfileAchievements.new(request.get)
+      else
+        request.get
+      end
     end
   
     def get_achievements()
       response = @connection.request.with_app_key.to("/achievements").get
-      response.map{|achievement_json| IActionable::Objects::Achievement.new(achievement_json)}
+      if @wrap_in_object
+        response.map{|achievement_json| IActionable::Objects::Achievement.new(achievement_json)}
+      else
+        response
+      end
     rescue NoMethodError => e
       []
     end
@@ -110,12 +137,21 @@ module IActionable
       else
         request.to("/#{profile_type}/#{id_type}/#{id}/challenges")
       end
-      IActionable::Objects::ProfileChallenges.new(request.get)
+      
+      if @wrap_in_object
+        IActionable::Objects::ProfileChallenges.new(request.get)
+      else
+        request.get
+      end
     end
   
     def get_challenges()
       response = @connection.request.with_app_key.to("/challenges").get
-      response.map{|challenge_json| IActionable::Objects::Challenge.new(challenge_json)}
+      if @wrap_in_object
+        response.map{|challenge_json| IActionable::Objects::Challenge.new(challenge_json)}
+      else
+        response
+      end
     rescue NoMethodError => e
       []
     end
@@ -134,12 +170,21 @@ module IActionable
       else
         request.to("/#{profile_type}/#{id_type}/#{id}/goals")
       end
-      IActionable::Objects::ProfileGoals.new(request.get)
+      
+      if @wrap_in_object
+        IActionable::Objects::ProfileGoals.new(request.get)
+      else
+        request.get
+      end
     end
   
     def get_goals()
       response = @connection.request.with_app_key.to("/goals").get
-      response.map{|goal_json| IActionable::Objects::Goal.new(goal_json)}
+      if @wrap_in_object
+        response.map{|goal_json| IActionable::Objects::Goal.new(goal_json)}
+      else
+        response
+      end
     rescue NoMethodError => e
       []
     end
@@ -154,8 +199,12 @@ module IActionable
       request.with_params(:pageCount => page_count) unless page_count.blank?
       request.with_params(:id => id) unless id.blank? || id_type.blank?
       request.with_params(:idType => id_type) unless id.blank? || id_type.blank?
-      response = request.get
-      IActionable::Objects::LeaderboardReport.new(response)
+      
+      if @wrap_in_object
+        IActionable::Objects::LeaderboardReport.new(request.get)
+      else
+        request.get
+      end
     end
   
     # ===================================
@@ -164,7 +213,12 @@ module IActionable
   
     def get_profile_notifications(profile_type, id_type, id)
       response = @connection.request.with_app_key.to("/#{profile_type}/#{id_type}/#{id}/notifications").get
-      IActionable::Objects::ProfileNotifications.new(response)
+
+      if @wrap_in_object
+        IActionable::Objects::ProfileNotifications.new(response)
+      else
+        response
+      end
     end
   end
 end

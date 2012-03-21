@@ -90,8 +90,19 @@ describe IActionable::Api do
       end
       
       it "should return the response as a ProfileSummary object" do
-        IActionable::Objects::ProfileSummary.should_receive(:new).once.with(@mock_response)
-        @api.get_profile_summary(@profile_type, @id_type, @id, nil)
+        IActionable::Objects::ProfileSummary.should_receive(:new).once.with(@mock_response).and_return(@mock_object)
+        @api.get_profile_summary(@profile_type, @id_type, @id, nil).should == @mock_object
+      end
+      
+      describe "when told to be returned as raw json/key-values" do
+        before do
+          @api.set_object_wrapping(false)
+        end
+        
+        it "should return the data from the response un-altered" do
+          IActionable::Objects::ProfileSummary.should_not_receive(:new)
+          @api.get_profile_summary(@profile_type, @id_type, @id, nil).should == @mock_response
+        end
       end
     end
     
@@ -151,8 +162,21 @@ describe IActionable::Api do
       it "should return the response as a ProfileSummary object" do
         @mock_connection.stub!(:to).and_return(@mock_connection)
         @mock_connection.stub!(:get).and_return(@mock_response)
-        IActionable::Objects::ProfilePoints.should_receive(:new).once.with(@mock_response).and_return(@mock_response)
-        @api.get_profile_points(@profile_type, @id_type, @id, @point_type).should == @mock_response
+        IActionable::Objects::ProfilePoints.should_receive(:new).once.with(@mock_response).and_return(@mock_object)
+        @api.get_profile_points(@profile_type, @id_type, @id, @point_type).should == @mock_object
+      end
+      
+      describe "when told to be returned as raw json/key-values" do
+        before do
+          @api.set_object_wrapping(false)
+        end
+        
+        it "should return the data from the response un-altered" do
+          @mock_connection.stub!(:to).and_return(@mock_connection)
+          @mock_connection.stub!(:get).and_return(@mock_response)
+          IActionable::Objects::ProfilePoints.should_not_receive(:new)
+          @api.get_profile_points(@profile_type, @id_type, @id, @point_type).should == @mock_response
+        end
       end
     end
     
@@ -182,8 +206,19 @@ describe IActionable::Api do
       end
       
       it "should return the response as a ProfileSummary object" do
-        IActionable::Objects::ProfilePoints.should_receive(:new).once.with(@mock_response).and_return(@mock_response)
-        @api.update_profile_points(@profile_type, @id_type, @id, @point_type, @amount, nil).should == @mock_response
+        IActionable::Objects::ProfilePoints.should_receive(:new).once.with(@mock_response).and_return(@mock_object)
+        @api.update_profile_points(@profile_type, @id_type, @id, @point_type, @amount, nil).should == @mock_object
+      end
+      
+      describe "when told to be returned as raw json/key-values" do
+        before do
+          @api.set_object_wrapping(false)
+        end
+        
+        it "should return the data from the response un-altered" do
+          IActionable::Objects::ProfilePoints.should_not_receive(:new)
+          @api.update_profile_points(@profile_type, @id_type, @id, @point_type, @amount, nil).should == @mock_response
+        end
       end
     end
   end
@@ -237,6 +272,18 @@ describe IActionable::Api do
           @api.send("get_profile_#{type[0]}", @profile_type, @id_type, @id, nil).should == @mock_object
         end
       end
+      
+      describe "when told to be returned as raw json/key-values" do
+        before do
+          @api.set_object_wrapping(false)
+        end
+        
+        it "should return the data from the response un-altered" do
+          @mock_connection.stub!(:to).and_return(@mock_connection)
+          type[1].should_not_receive(:new)
+          @api.send("get_profile_#{type[0]}", @profile_type, @id_type, @id, nil).should == @mock_response
+        end
+      end
     end
     
     describe "loading all #{type[0]} outside of a profile context" do
@@ -256,6 +303,15 @@ describe IActionable::Api do
         @mock_connection.stub!(:to).and_return(@mock_connection)
         type[2].should_receive(:new).once.with(@mock_response_item).and_return(@mock_object)
         @api.send("get_#{type[0]}").should == @mock_response
+      end
+      
+      describe "when told to be returned as raw json/key-values" do
+        it "should return the data from the response un-altered" do
+          @mock_connection.stub!(:to).and_return(@mock_connection)
+          type[2].should_not_receive(:new)
+          @api.set_object_wrapping(false)
+          @api.send("get_#{type[0]}").should == @mock_response
+        end
       end
     end
   end
@@ -286,8 +342,22 @@ describe IActionable::Api do
         @mock_connection.stub!(:to).and_return(@mock_connection)
         @mock_connection.stub!(:with_params).and_return(@mock_connection)
         @mock_connection.stub!(:get).and_return(@mock_response)
-        IActionable::Objects::LeaderboardReport.should_receive(:new).once.with(@mock_response).and_return(@mock_response)
-        @api.get_leaderboard(@profile_type, @point_type, @leaderboard, nil, nil, nil, nil).should == @mock_response
+        IActionable::Objects::LeaderboardReport.should_receive(:new).once.with(@mock_response).and_return(@mock_object)
+        @api.get_leaderboard(@profile_type, @point_type, @leaderboard, nil, nil, nil, nil).should == @mock_object
+      end
+      
+      describe "when told to be returned as raw json/key-values" do
+        before do
+          @api.set_object_wrapping(false)
+        end
+        
+        it "should return the data from the response un-altered" do
+          @mock_connection.stub!(:to).and_return(@mock_connection)
+          @mock_connection.stub!(:with_params).and_return(@mock_connection)
+          @mock_connection.stub!(:get).and_return(@mock_response)
+          IActionable::Objects::LeaderboardReport.should_not_receive(:new)
+          @api.get_leaderboard(@profile_type, @point_type, @leaderboard, nil, nil, nil, nil).should == @mock_response
+        end
       end
     end
   end
@@ -307,8 +377,23 @@ describe IActionable::Api do
       @mock_connection.stub!(:with_app_key).and_return(@mock_connection)
       @mock_connection.stub!(:to).and_return(@mock_connection)
       @mock_connection.stub!(:get).and_return(@mock_response)
-      IActionable::Objects::ProfileNotifications.should_receive(:new).once.with(@mock_response).and_return(@mock_response)
-      @api.get_profile_notifications(@profile_type, @id_type, @id).should == @mock_response
+      IActionable::Objects::ProfileNotifications.should_receive(:new).once.with(@mock_response).and_return(@mock_object)
+      @api.get_profile_notifications(@profile_type, @id_type, @id).should == @mock_object
+    end
+    
+    describe "when told to be returned as raw json/key-values" do
+      before do
+        @api.set_object_wrapping(false)
+      end
+      
+      it "should return the data from the response un-altered" do
+        @mock_connection.stub!(:request).and_return(@mock_connection)
+        @mock_connection.stub!(:with_app_key).and_return(@mock_connection)
+        @mock_connection.stub!(:to).and_return(@mock_connection)
+        @mock_connection.stub!(:get).and_return(@mock_response)
+        IActionable::Objects::ProfileNotifications.should_not_receive(:new)
+        @api.get_profile_notifications(@profile_type, @id_type, @id).should == @mock_response
+      end
     end
   end
 end
