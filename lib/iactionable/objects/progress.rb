@@ -29,8 +29,8 @@ module IActionable
       end
       
       def condition_met_date
-        # bug in ruby 1.9.2 where Time.strptime does not support seconds-since-epoch format, but Date.strptime does, so we'll use that for now
-        Date.strptime(@condition_met_date, "%s%z").to_time unless @condition_met_date.blank?
+        # bug in ruby 1.9.2 where Time.strptime does not support seconds-since-epoch format, but DateTime.strptime does, so we'll use that for now
+        DateTime.strptime(@condition_met_date, "%s%z").to_time unless @condition_met_date.blank?
       end
       
       def to_hash

@@ -1,5 +1,9 @@
 # CHANGELOG #
 
+## 0.1.1 ##
+
+* changing use of Date to DateTime;
+
 ## 0.1.0 ##
 
 * New feature: api instance can be set to not wrap raw response within objects with: `@api.set\_object\_wrapping(false)`
