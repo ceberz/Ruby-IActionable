@@ -9,20 +9,20 @@ describe IActionable::Connection do
     }
     @settings = IActionable::Settings.new(@settings_hash)
   end
-  
+
   describe "initialization" do
     it "should initialize a new Faraday connection object" do
       mock_faraday_bulder = mock("faraday builder")
-      
+
       Faraday.should_receive(:new).once.with("http://api.iactionable.com/v#{@settings.version}/").and_yield(mock_faraday_bulder)
-      mock_faraday_bulder.should_receive(:use).once.with(FaradayStack::ResponseJSON, {:content_type => 'application/json'})
+      mock_faraday_bulder.should_receive(:use).once.with(FaradayMiddleware::ParseJson, {:content_type => 'application/json'})
       mock_faraday_bulder.should_receive(:use).once.with(Faraday::Response::RaiseError)
       mock_faraday_bulder.should_receive(:use).once.with(Faraday::Adapter::NetHttp)
-      
+
       IActionable::Connection.new(@settings)
     end
   end
-  
+
   describe "requests" do
     before do
       @mock_faraday_connection = mock("mock faraday connection")
@@ -37,7 +37,7 @@ describe IActionable::Connection do
       @connection = IActionable::Connection.new(@settings)
       @path = "/test/path"
     end
-    
+
     describe "using get method" do
       describe "requiring an app key" do
         describe "with optional params" do
@@ -48,7 +48,7 @@ describe IActionable::Connection do
             @connection.request.to(@path).with_app_key.with_params(:foo => :bar).get.should == @mock_response_body
           end
         end
-        
+
         describe "without optional params" do
           it "should request correctly through faraday and return the body" do
             @mock_faraday_connection.should_receive(:get).and_yield(@mock_faraday_request_builder).and_return(@mock_faraday_response)
@@ -59,7 +59,7 @@ describe IActionable::Connection do
         end
       end
     end
-    
+
     describe "using post method" do
       describe "requiring an app key" do
         describe "requiring an api key" do
@@ -72,7 +72,7 @@ describe IActionable::Connection do
               @connection.request.to(@path).with_app_key.with_api_key.with_params(:foo => :bar).post.should == @mock_response_body
             end
           end
-        
+
           describe "without optional params" do
             it "should request correctly through faraday and return the body" do
               @mock_faraday_connection.should_receive(:post).and_yield(@mock_faraday_request_builder).and_return(@mock_faraday_response)
@@ -82,7 +82,7 @@ describe IActionable::Connection do
               @connection.request.to(@path).with_app_key.with_api_key.post.should == @mock_response_body
             end
           end
-          
+
           describe "with an optional body" do
             it "should request correctly through faraday and return the body" do
               @mock_faraday_connection.should_receive(:post).and_yield(@mock_faraday_request_builder).and_return(@mock_faraday_response)
@@ -93,7 +93,7 @@ describe IActionable::Connection do
               @connection.request.to(@path).with_app_key.with_api_key.with_body(:foo => :bar).post.should == @mock_response_body
             end
           end
-        
+
           describe "without an optional body" do
             it "should request correctly through faraday and return the body" do
               @mock_faraday_connection.should_receive(:post).and_yield(@mock_faraday_request_builder).and_return(@mock_faraday_response)
