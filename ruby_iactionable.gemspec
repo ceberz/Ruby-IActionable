@@ -23,6 +23,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "yard"
 
   s.add_runtime_dependency "faraday"
-  s.add_runtime_dependency "faraday-stack", '~> 0.1.5'
+  s.add_runtime_dependency "faraday_middleware", '~> 0.8.7'
   s.add_runtime_dependency "activesupport", ">= 3.0.0"
 end
